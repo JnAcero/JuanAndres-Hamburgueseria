@@ -1,7 +1,8 @@
 
-
+using System.ComponentModel.DataAnnotations.Schema;
 namespace Dominio.Entities
 {
+     [NotMapped]
     public class Usuario:BaseEntity
     {
     public string Username { get; set; }

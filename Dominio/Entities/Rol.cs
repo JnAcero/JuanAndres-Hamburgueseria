@@ -1,7 +1,8 @@
 
-
+using System.ComponentModel.DataAnnotations.Schema;
 namespace Dominio.Entities
 {
+    [NotMapped]
     public class Rol:BaseEntity
     {
         public string Nombre { get; set; }

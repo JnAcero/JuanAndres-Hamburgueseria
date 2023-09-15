@@ -1,3 +1,4 @@
+using System.Reflection;
 using API.Extensions;
 using API.Helpers;
 using API.Helpers.Errors;
@@ -31,9 +32,10 @@ builder.Services.AddValidationErrors();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
+builder.Services.AddAutoMapper(Assembly.GetEntryAssembly());
 builder.Services.ConfigureCors();
-
+builder.Services.ConfigureApiVersioning();
+builder.Services.ConfigureRateLimiting();
 builder.Services.AddJwt(builder.Configuration);
 
 builder.Services.AddAuthorization(opts =>{
@@ -51,7 +53,7 @@ builder.Services.AddDbContext<DbAppContext>(options =>
 
 var app = builder.Build();
 
-app.UseMiddleware<ExceptionMiddleware>();
+//app.UseMiddleware<ExceptionMiddleware>();
 
 app.UseStatusCodePagesWithReExecute("/errors/{0}");
 
@@ -79,6 +81,8 @@ using (var scope = app.Services.CreateScope())
 app.UseCors("CorsPolicy");
 
 app.UseHttpsRedirection();
+app.UseApiVersioning();
+app.UseRateLimiter();
 app.UseAuthentication();
 app.UseAuthorization();
 

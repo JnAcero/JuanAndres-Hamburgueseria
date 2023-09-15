@@ -1,18 +1,19 @@
-
-
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
-using Dominio.Entities;
+using System.Threading.Tasks;
 using Dominio.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Persistencia;
 
-namespace Aplicacion.Repository;
-
-public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
+namespace Aplicacion.Repository
 {
-    protected DbAppContext _context;
+    public class GenericRepo<T> : IGenericRepo<T> where T:class
+    {
+        private readonly DbAppContext _context;
 
-    public GenericRepository(DbAppContext context)
+    public GenericRepo(DbAppContext context)
     {
         _context = context;
     }
@@ -37,17 +38,13 @@ public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
         return await _context.Set<T>().ToListAsync();
         
     }
-    public virtual async Task<T> FindFirstAsync(Expression<Func<T, bool>> expression)
-    {
-        return await _context.Set<T>().FirstOrDefaultAsync(expression);
-    }
 
     public virtual async Task<T> GetByIdAsync(int id)
     {
         return await _context.Set<T>().FindAsync(id);
     }
 
-    public virtual async Task<T> GetById(string id)
+    public virtual async Task<T> GetByIdAsync(string id)
     {
        return await _context.Set<T>().FindAsync(id);
     }
@@ -76,4 +73,5 @@ public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
             .ToListAsync();
         return (totalRegistros, registros);
     }
+}
 }

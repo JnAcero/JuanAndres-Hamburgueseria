@@ -6,16 +6,20 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using API.Services;
 using API.Dtos;
+using Dominio.Interfaces;
+using AutoMapper;
 
 namespace API.Controllers;
 
    public class UsuariosController : BaseApiController
 {
     private readonly IUserService _userService;
-    public UsuariosController(IUserService userService)
+
+    public UsuariosController(IUnitOfWork unitOfWork, IMapper mapper,IUserService userService) : base(unitOfWork, mapper)
     {
-        _userService = userService;
+         _userService = userService;
     }
+
     [HttpPost("register")]
     public async Task<ActionResult> RegisterAsync(RegisterDto model)
     {
